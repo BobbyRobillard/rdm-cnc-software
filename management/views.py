@@ -42,6 +42,4 @@ def upload_csv(request):
     data = {}
     if "GET" == request.method:
         return render(request, "management/upload_csv.html", data)
-    # if not GET, then proceed
-    read_csv(request)
-    return HttpResponseRedirect(reverse("website:homepage"))
+    return read_csv(request)
