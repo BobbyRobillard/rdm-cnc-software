@@ -52,34 +52,36 @@ table {
   <div class="row">
       <div class="col-md-10 offset-1 col-lg-6 offset-lg-3">
         <h2>System Settigns</h2>
+        <form method="POST">{% csrf_token %}
         <table class="table">
             <tr>
               <td>Small Plunge Distance</td>
-              <td><input type="number" /></td>
+              <td>{{ form.small_plunge_distance }}</td>
               <td>mm</td>
             </tr>
             <tr>
               <td>Medium Plunge Distance</td>
-              <td><input type="number" /></td>
+              <td>{{ form.medium_plunge_distance }}</td>
               <td>mm</td>
             </tr>
             <tr>
               <td>Large Plunge Distance</td>
-              <td><input type="number" /></td>
+              <td>{{ form.large_plunge_distance }}</td>
               <td>mm</td>
             </tr>
             <tr>
               <td>CNC Locked</td>
-              <td style="text-align:left;"><input style="position:relative;left:30px;" type="checkbox" /></td>
+              <td style="text-align:left" >{{ form.cnc_is_locked }}</td>
               <td></td>
             </tr>
             <tr>
               <td># Recent Orders to Retain</td>
-              <td><input type="number" /></td>
+              <td>{{ form.recent_orders_to_retain }}</td>
               <td>orders</td>
             </tr>
         </table>
         <button class="btn btn-success col-12">Save Settings</button>
+        </form>
       </div>
   </div>
 </div>
