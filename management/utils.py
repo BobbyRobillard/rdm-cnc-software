@@ -1,7 +1,9 @@
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
+
+from django.contrib import messages
 
 from management.models import Setting, Lense
 from management.forms import SettingForm, LenseForm
@@ -42,6 +44,7 @@ def get_initial_setting():
     return initial
 
 def read_csv(request):
+    added = True
     try:
         csv_file = request.FILES["csv_file"]
 
@@ -58,9 +61,6 @@ def read_csv(request):
 
                 fields = line.split(",")
 
-                for field in line:
-                    print(str(field) + "\n")
-
                 data = {
                     'make': fields[0],
                     'model': fields[1],
@@ -72,11 +72,12 @@ def read_csv(request):
                 }
 
                 form = LenseForm(data) # Use our form to make sure csv data is valid
+
                 if not form.is_valid():
-                    messages.error('Error in file data, at: %s | %s' % (data['make'], data['model']))
+                    added = False
                 else:
                     form.save()
 
     except Exception as e:
         print(str(e))
-    return HttpResponseRedirect(reverse("management:upload_csv"))
+    return added

@@ -42,4 +42,10 @@ def upload_csv(request):
     data = {}
     if "GET" == request.method:
         return render(request, "management/upload_csv.html", data)
-    return read_csv(request)
+
+    if read_csv(request):
+        messages.success(request, "CSV Uploaded Successfully")
+    else:
+        messages.error(request, "Error uploading CSV")
+        
+    return redirect('management:upload_csv')

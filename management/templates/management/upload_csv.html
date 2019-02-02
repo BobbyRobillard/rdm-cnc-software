@@ -4,13 +4,13 @@
 <br /><br /><br />
 <div class="container">
   <div class="row">
-    <div class="col-10 offset-1 col-md-6 offset-md-3"
+    <div class="col-10 offset-1 col-md-6 offset-md-3">
       <form action="{% url 'management:upload_csv' %}" method="POST" enctype="multipart/form-data" class="form-horizontal">
           {% csrf_token %}
           Select a File to Upload<br />
           <input type="file" name="csv_file" id="csv_file" required="True">
           <br /><br />
-          <button class="btn btn-primary">Upload</button>
+          <button type="submit" class="btn btn-primary">Upload</button>
       </form>
     </div>
   </div>
