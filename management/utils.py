@@ -39,3 +39,38 @@ def get_initial_setting():
         "recent_orders_to_retain": initial_setting.recent_orders_to_retain,
     }
     return initial
+
+def read_csv(request):
+    try:
+        csv_file = request.FILES["csv_file"]
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request,'File is not CSV type')
+            return HttpResponseRedirect(reverse("management:upload_csv"))
+    #if file is too large, return
+        if csv_file.multiple_chunks():
+            messages.error(request,"Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
+            return HttpResponseRedirect(reverse("management:upload_csv"))
+
+        file_data = csv_file.read().decode("utf-8")
+
+        lines = file_data.split("\n")
+    #loop over the lines and save them in db. If error , store as string and then display
+        for line in lines:
+            fields = line.split(",")
+            data = {}
+            data['zoom_height'] = fields[0]
+            data['zoom_diameter'] = fields[1]
+            data['focus_height'] = fields[2]
+            data['focus_diameter'] = fields[3]
+            data['make'] = fields[4]
+            data['model'] = fields[5]
+            try:
+                form = LenseForm(data)
+                if form.is_valid():
+                    form.save()
+            except Exception as e:
+                return False
+
+    except Exception as e:
+        return False
+    return True
