@@ -86,6 +86,11 @@ table {
                         <option selected>
                           Select a Lense Make...
                         </option>
+                        {% for make in makes %}
+                        <option value="{{ make }}">
+                          {{ make }}
+                        </option>
+                        {% endfor %}
                       </select><br />
 
                       <select>

@@ -20,7 +20,8 @@ class Lense(models.Model):
     focus_diameter = models.DecimalField(default=0, max_digits=max_digits, decimal_places=decimal_digits)
     make = models.CharField(max_length=name_length)
     model = models.CharField(max_length=name_length)
-    custom_band_size = models.ForeignKey(StandardBandit, default=None, null=True, on_delete=models.CASCADE)
+    custom_zoom_band_size = models.ForeignKey(StandardBandit, related_name='custom_zoom_band_size', blank=True, null=True, on_delete=models.CASCADE)
+    custom_focus_band_size = models.ForeignKey(StandardBandit, related_name='custom_focus_band_size', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.make) + ' | ' + str(self.model)
@@ -31,6 +32,9 @@ class Setting(models.Model):
     large_plunge_distance = models.DecimalField(default=0, max_digits=max_digits, decimal_places=decimal_digits)
     cnc_is_locked = models.BooleanField(default=False)
     recent_orders_to_retain = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return "System Settings"
 
 class Manager(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

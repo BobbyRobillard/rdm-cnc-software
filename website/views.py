@@ -4,14 +4,14 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+
+from .utils import *
+
 import json
 
-from website.utils import *
-
-#-------------------------------------------------------------------------------
-# Page Views
-#-------------------------------------------------------------------------------
 @login_required
 def homepage_view(request):
-    context = {}
+    context = {
+    "makes" : Lense.objects.all().values_list('make', flat=True).distinct(),
+    }
     return render(request, "website/homepage.html", context)

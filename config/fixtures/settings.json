@@ -1,0 +1,13 @@
+[
+{
+  "model": "management.setting",
+  "pk": 1,
+  "fields": {
+    "small_plunge_distance": "5",
+    "medium_plunge_distance": "5",
+    "large_plunge_distance": "5",
+    "cnc_is_locked": true,
+    "recent_orders_to_retain": 0
+  }
+}
+]

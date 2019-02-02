@@ -1,1 +1,1 @@
-from management.models import Setting
+from management.models import Setting, Lense

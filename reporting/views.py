@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 import json
 
-from reporting.utils import * 
+from reporting.utils import *
 #-------------------------------------------------------------------------------
 # Page Views
 #-------------------------------------------------------------------------------
@@ -15,6 +15,5 @@ class HomePageView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = {
-            'recent_orders' : RecentOrder.objects.all(),
-            'lenses': Lense.objects.all()
+            'diagnostics': Diagnostic.objects.all().order_by('amount_zoom_processed').order_by('amount_focus_processed')
         }
