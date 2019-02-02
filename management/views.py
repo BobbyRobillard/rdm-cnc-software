@@ -13,13 +13,45 @@ class ViewSettingsPage(FormView):
         update_setting(data)
         return super().form_valid(form)
 
-class ViewUserManagementPage(TemplateView):
+class UpdateUserStatusView(View):
     template_name = 'management/user_management.html'
+    RoleFormSet = formset_factory(RoleForm, max_num=len(User.objects.all()))
+    success_url = reverse_lazy('management:user_management')
 
-    def get_context_data(self, *args, **kwargs):
+    def get(self, *args, **kwargs):
         context = {
-            'Managers': Manager.objects.all()
+            'Managers': Manager.objects.all(),
+            'users': User.objects.all(),
+            'RoleFormSet': self.RoleFormSet(initial=[
+            {
+                'user': user,
+                'role': UserMethods.is_manager(user)
+            } for user in User.objects.all()
+            ])
         }
+        return render(self.request, self.template_name, context)
+
+    def post(self,request,*args,**kwargs):
+        RoleFormSet=self.RoleFormSet(self.request.POST)
+        if RoleFormSet.is_valid():
+            for role in RoleFormSet:
+                if role.role == 'Manager':
+                    Manager.objects.update_or_create(user=role.user, defaults={'user':role.user})
+            return HttpResponseRedirect(reverse_lazy('management:user_management'))
+        else:
+            context = {
+                'Managers': Manager.objects.all(),
+                'users': User.objects.all(),
+                'formset': self.RoleFormSet(initial=[
+                {
+                    'user': user,
+                    'role': 'Manager'
+                } for user in User.objects.all()
+                ])
+            }
+        return render(self.request,self.template_name,context)
+
+
 
 class UpdateLenseModelsView(TemplateView):
     template_name = 'website/homepage.html'
@@ -47,5 +79,5 @@ def upload_csv(request):
         messages.success(request, "CSV Uploaded Successfully")
     else:
         messages.error(request, "Error uploading CSV")
-        
+
     return redirect('management:upload_csv')

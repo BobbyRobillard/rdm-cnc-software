@@ -1,12 +1,15 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.views.generic.edit import FormView
 
 from django.contrib import messages
 
-from management.models import Setting, Lense
-from management.forms import SettingForm, LenseForm
+from django.contrib.auth.models import User
+from management.models import Setting, Lense, Manager
+from website.models import UserMethods
+from management.forms import SettingForm, LenseForm, RoleForm
+from django.forms import formset_factory
 
 import csv
 
