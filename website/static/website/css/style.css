@@ -2,62 +2,41 @@
   --main-color: black;
   --secondary-color: #08f;
   --container-corner-radius: 10px;
+  --title-size: 25px;
 }
 
 .navbar-dark, .bg-dark{
   background-color: black !important;
 }
 
-.main-container {
-  background-color: #eee;
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
-  border-radius: 10px;
-  padding: 25px;
-  padding-bottom: none;
-  margin-top: 50px;
-  margin-bottom: 25px;
-}
 .fa:hover, .far:hover, .fas:hover {
   cursor: pointer;
 }
 
-:root {
-  --title-size: 25px;
-}
-
-thead {
-  background-color: black;
-  color: white;
-}
-.icon-container {
-  text-align:right;
-}
 .white {
   background-color: white;
 }
+
+.fa-upload, .fa-lock, .fa-unlock {
+  color: white;
+  position: relative;
+  top: 5px;
+  left: 50px;
+  font-size: 30px;
+}
+
+.fa-lock, .fa-unlock {
+  left: 60px;
+}
+
 .fa-trash-alt {
   color: red;
 }
+
 .fa-edit {
   color: orange;
 }
-.fa-bell {
-  float: right;
-  position: relative;
-  top: 5px;
-}
+
 .fa-plus {
   color: green;
-}
-
-.company-name {
-  font-size: var(--title-size);
-  font-weight:bold;
-}
-
-h1 {
-  text-align: center;
-  font-weight:bold;
 }
