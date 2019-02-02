@@ -6,6 +6,7 @@ from django.views.generic.edit import FormView
 from management.models import Setting, Lense
 from management.forms import SettingForm, LenseForm
 
+import csv
 
 def update_setting(data):
     try:
@@ -43,34 +44,39 @@ def get_initial_setting():
 def read_csv(request):
     try:
         csv_file = request.FILES["csv_file"]
-        if not csv_file.name.endswith('.csv'):
+
+        if not csv_file.name.endswith('.csv'): # if wrong file type
             messages.error(request,'File is not CSV type')
-            return HttpResponseRedirect(reverse("management:upload_csv"))
-    #if file is too large, return
-        if csv_file.multiple_chunks():
+
+        elif csv_file.multiple_chunks(): # if file is too large
             messages.error(request,"Uploaded file is too big (%.2f MB)." % (csv_file.size/(1000*1000),))
-            return HttpResponseRedirect(reverse("management:upload_csv"))
 
-        file_data = csv_file.read().decode("utf-8")
+        else:
+            file_data = csv_file.read().decode("utf-8")
 
-        lines = file_data.split("\n")
-    #loop over the lines and save them in db. If error , store as string and then display
-        for line in lines:
-            fields = line.split(",")
-            data = {}
-            data['zoom_height'] = fields[0]
-            data['zoom_diameter'] = fields[1]
-            data['focus_height'] = fields[2]
-            data['focus_diameter'] = fields[3]
-            data['make'] = fields[4]
-            data['model'] = fields[5]
-            try:
-                form = LenseForm(data)
-                if form.is_valid():
+            for line in file_data:
+
+                fields = line.split(",")
+
+                for field in line:
+                    print(str(field) + "\n")
+
+                data = {
+                    'make': fields[0],
+                    'model': fields[1],
+                    'zoom_diameter': fields[2],
+                    'zoom_height': fields[3],
+                    'focus_diameter': fields[4],
+                    'focus_height': fields[5],
+                    'type' : fields[6]
+                }
+
+                form = LenseForm(data) # Use our form to make sure csv data is valid
+                if not form.is_valid():
+                    messages.error('Error in file data, at: %s | %s' % (data['make'], data['model']))
+                else:
                     form.save()
-            except Exception as e:
-                return False
 
     except Exception as e:
-        return False
-    return True
+        print(str(e))
+    return HttpResponseRedirect(reverse("management:upload_csv"))
