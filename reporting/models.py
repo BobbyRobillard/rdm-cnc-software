@@ -8,3 +8,6 @@ class RecentOrder(models.Model):
 class Diagnostic(models.Model):
     lense = models.ForeignKey(Lense, on_delete=models.CASCADE)
     amount_processed = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return str(self.lense) + ' | ' + str(self.amount_processed)

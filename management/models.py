@@ -10,6 +10,9 @@ class StandardBandit(models.Model):
     name = models.CharField(max_length=name_length)
     abbreviation = models.CharField(max_length=3)
 
+    def __str__(self):
+        return str(self.name)
+
 class Lense(models.Model):
     zoom_height = models.DecimalField(default=0, max_digits=max_digits, decimal_places=decimal_digits)
     zoom_diameter = models.DecimalField(default=0, max_digits=max_digits, decimal_places=decimal_digits)
@@ -18,6 +21,9 @@ class Lense(models.Model):
     make = models.CharField(max_length=name_length)
     model = models.CharField(max_length=name_length)
     custom_band_size = models.ForeignKey(StandardBandit, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.make) + ' | ' + str(self.model)
 
 class Setting(models.Model):
     small_plunge_distance = models.DecimalField(default=0, max_digits=max_digits, decimal_places=decimal_digits)
@@ -28,3 +34,6 @@ class Setting(models.Model):
 
 class Manager(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user
