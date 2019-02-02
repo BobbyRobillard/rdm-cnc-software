@@ -20,7 +20,7 @@ class Lense(models.Model):
     focus_diameter = models.DecimalField(default=0, max_digits=max_digits, decimal_places=decimal_digits)
     make = models.CharField(max_length=name_length)
     model = models.CharField(max_length=name_length)
-    custom_band_size = models.ForeignKey(StandardBandit, on_delete=models.CASCADE)
+    custom_band_size = models.ForeignKey(StandardBandit, default=None, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.make) + ' | ' + str(self.model)

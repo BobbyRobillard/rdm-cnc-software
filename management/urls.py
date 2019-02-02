@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 
-from management.views import ViewSettingsPage
+from management.views import ViewSettingsPage, ViewUserManagementPage, upload_csv
 
 # Application Routes (URLs)
 
@@ -10,4 +10,6 @@ urlpatterns = [
     	# General Page Views
 		# url(r'^$', views.homepage_view, name='homepage'),
 		url(r'^settings/$', ViewSettingsPage.as_view(), name='settings'),
+		url(r'^user-management/$', ViewUserManagementPage.as_view(), name='user_management'),
+		url(r'^upload/csv/$', upload_csv, name='upload_csv'),
 ]

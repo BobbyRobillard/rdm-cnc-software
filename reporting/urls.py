@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 
-from . import views
+
+from .views import HomePageView
 
 # Application Routes (URLs)
 
@@ -8,5 +9,5 @@ app_name = 'reporting'
 
 urlpatterns = [
     	# General Page Views
-		url(r'^$', views.homepage_view, name='homepage'),
+		url(r'^$', HomePageView.as_view(), name='homepage'),
 ]

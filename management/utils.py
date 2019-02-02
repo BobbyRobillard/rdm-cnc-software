@@ -1,10 +1,10 @@
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, HttpResponseRedirect
+from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
-from management.models import Setting
-from management.forms import SettingForm
+from management.models import Setting, Lense
+from management.forms import SettingForm, LenseForm
 
 
 def update_setting(data):

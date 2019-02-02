@@ -6,10 +6,15 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 import json
 
+from reporting.utils import * 
 #-------------------------------------------------------------------------------
 # Page Views
 #-------------------------------------------------------------------------------
-@login_required
-def homepage_view(request):
-    context = {}
-    return render(request, "reporting/homepage.html", context)
+class HomePageView(TemplateView):
+    template_name = 'reporting/homepage.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = {
+            'recent_orders' : RecentOrder.objects.all(),
+            'lenses': Lense.objects.all()
+        }
