@@ -21,6 +21,23 @@ class ViewUserManagementPage(TemplateView):
             'Managers': Manager.objects.all()
         }
 
+class UpdateLenseModelsView(TempalteView):
+    template_name = 'website/homepage.html'
+
+    def get(self, request, *args, **kwargs):
+        models = Lense.objects.filter(make=kwargs['make'])
+        data = {
+            'models': models.values_list('make', flat=True).distinct(),
+        }
+        return self.render_to_response(data)
+
+
+    def render_to_response(self, data, **response_kwargs):
+        if self.request.is_ajax(): #checks if the request is ajax
+            return JsonResponse(data, safe=False, **response_kwargs)
+        else: # if not, returns a normal response
+            return super(DeleteMonitorView,self).render_to_response(context, **response_kwargs)
+
 def upload_csv(request):
     data = {}
     if "GET" == request.method:
