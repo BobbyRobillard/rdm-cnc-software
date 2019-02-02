@@ -21,7 +21,7 @@ class ViewUserManagementPage(TemplateView):
             'Managers': Manager.objects.all()
         }
 
-class UpdateLenseModelsView(TempalteView):
+class UpdateLenseModelsView(TemplateView):
     template_name = 'website/homepage.html'
 
     def get(self, request, *args, **kwargs):
