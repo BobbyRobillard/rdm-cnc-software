@@ -8,5 +8,5 @@ app_name = 'reporting'
 
 urlpatterns = [
     	# General Page Views
-		# url(r'^$', views.homepage_view, name='homepage'),
+		url(r'^$', views.homepage_view, name='homepage'),
 ]
