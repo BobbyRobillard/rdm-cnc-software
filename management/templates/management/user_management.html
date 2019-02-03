@@ -56,7 +56,7 @@ table {
 <div class="container">
   <div class="row">
       <div class="col-lg-6">
-        <h2>User Management  <i class="fa fa-plus"></i></h2>
+        <h2>User Management <i class="fa fa-plus" href="{% url 'management:add_user' %}"></i></h2>
         <form method="POST" action="{% url 'management:user_management' %}">{% csrf_token %}
           <table id="user-table" class="table">
               <tbody>
@@ -88,6 +88,10 @@ table {
 {% endblock content %}
 {% block js %}
   <script>
+    $('.fa-plus').click(function() {
+  window.location.href = $(this).attr('href');
+});
+
     $(".fa-trash-alt").click(function() {
       var id = $(this).attr('id');
       console.log("clicked: " + $(this).attr('id') + "\n");

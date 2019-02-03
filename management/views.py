@@ -79,6 +79,12 @@ class UpdateLenseModelsView(TemplateView):
         else: # if not, returns a normal response
             return super(DeleteMonitorView,self).render_to_response(context, **response_kwargs)
 
+class AddUserView(CreateView):
+    model = User
+    form_class = UserCreationForm
+    template_name = 'management/add_user.html'
+    success_url = reverse_lazy('management:user_management')
+
 class DeleteUserView(DeleteView):
     model = User
     success_url = reverse_lazy('management:user_management')
