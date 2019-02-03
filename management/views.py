@@ -79,6 +79,23 @@ class UpdateLenseModelsView(TemplateView):
         else: # if not, returns a normal response
             return super(DeleteMonitorView,self).render_to_response(context, **response_kwargs)
 
+class DeleteUserView(DeleteView):
+    model = User
+    success_url = reverse_lazy('management:user_management')
+
+    # ajax sends a get request, which then deletes the object
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        context = self.get_context_data(object=self.object) # we dont need this but its safe to have
+        return self.render_to_response(context)
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax(): #checks if the request is ajax
+            return JsonResponse({'deleted': True}, safe=False, **response_kwargs)
+        else: # if not, returns a normal response
+            return super(DeleteMonitorView,self).render_to_response(context, **response_kwargs)
+
 def upload_csv(request):
     data = {}
     if "GET" == request.method:

@@ -45,6 +45,9 @@ table {
 .fa-plus {
   color: green
 }
+.fa-trash {
+  color:red
+}
 </style>
 {% endblock custom_css %}
 
@@ -55,11 +58,11 @@ table {
       <div class="col-lg-6">
         <h2>User Management  <i class="fa fa-plus"></i></h2>
         <form method="POST" action="{% url 'management:user_management' %}">{% csrf_token %}
-          <table class="table">
+          <table id="user-table" class="table">
               <tbody>
                 {{ RoleFormSet.management_form }}
                 {% for role in RoleFormSet %}
-                <tr>
+                <tr id="row-{{role.user.value}}">
                   <td style="text-align:left">
                      {{ role.user }}
                     </td>
@@ -67,7 +70,7 @@ table {
                       {{ role.role }}
                     </td>
                     <td>
-                      <i id="1" href="{% url 'management:delete_user' role.user %}" class="fas fa-trash-alt"></i>
+                      <i id="{{ role.user.value }}" href="{% url 'management:delete_user' role.user.value %}" class="fas fa-trash-alt"></i>
                       </td>
                   </tr>
                   {% endfor %}
@@ -86,8 +89,9 @@ table {
 {% block js %}
   <script>
     $(".fa-trash-alt").click(function() {
+      var id = $(this).attr('id');
       console.log("clicked: " + $(this).attr('id') + "\n");
-      $('#delete-row-' + $(this).attr('id')).remove();
+      $('#user-table #row-' + id).remove();
       $.get($(this).attr('href'), {}, function() {});
     });
   </script>

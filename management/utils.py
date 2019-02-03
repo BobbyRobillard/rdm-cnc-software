@@ -1,7 +1,8 @@
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, View
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, DeleteView
+from django.http import JsonResponse
 
 from django.contrib import messages
 
