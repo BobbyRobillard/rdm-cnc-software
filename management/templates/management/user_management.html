@@ -54,8 +54,8 @@ table {
   <div class="row">
       <div class="col-lg-6">
         <h2>User Management  <i class="fa fa-plus"></i></h2>
+        <form method="POST" action="{% url 'management:user_management' %}">{% csrf_token %}
           <table class="table">
-            <form method="POST" action="{% url 'management:user_management' %}">
               <tbody>
                 {{ RoleFormSet.management_form }}
                 {% for role in RoleFormSet %}
@@ -68,8 +68,13 @@ table {
                   </tr>
                   {% endfor %}
               </tbody>
+            </table>
+            <div class="row">
+              <div class="col text-center">
+            <button  type="submit" class="btn btn-primary">Update User Status</button>
+            </div>
+            </div>
             </form>
-          </table>
       </div>
   </div>
 </div>
