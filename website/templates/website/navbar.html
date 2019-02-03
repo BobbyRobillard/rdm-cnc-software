@@ -33,17 +33,14 @@
       <a class="nav-link" href="{% url 'management:settings' %}">Settings</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'management:user_management' %}">User Manangement</a>
-    </li>
-    <li class="nav-item">
       <a class="fas fa-upload" data-toggle="tooltip" title="Upload Lenses CSV" href="{% url 'management:upload_csv' %}"></a>
       {% if cnc_is_locked %}
-      <a class="unlock" href="{% url 'management:toggle_cnc' 1 False %}">
+      <a class="unlock" href="{% url 'management:toggle_cnc' 1 %}">
         <i class="fas fa-lock"  data-toggle="tooltip" title="Unlock CNC Machine"></i>
         <i class="fas fa-unlock" data-toggle="tooltip" title="Unlock CNC Machine"></i>
       </a>
       {% else %}
-      <a class="lock" href="{% url 'management:toggle_cnc' 1 True %}">
+      <a class="lock" href="{% url 'management:toggle_cnc' 1 %}">
         <i class="fas fa-unlock"  data-toggle="tooltip" title="Lock CNC Machine"></i>
         <i class="fas fa-lock" data-toggle="tooltip" title="Lock CNC Machine"></i>
       </a>

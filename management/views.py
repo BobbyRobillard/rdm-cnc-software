@@ -16,39 +16,6 @@ class ViewSettingsPage(LoginRequiredMixin, FormView):
         update_setting(data)
         return super().form_valid(form)
 
-class UpdateUserStatusView(ManagerRequiredMixin, View):
-    template_name = 'management/user_management.html'
-    RoleFormSet = formset_factory(RoleForm, max_num=len(User.objects.all()))
-    success_url = reverse_lazy('management:user_management')
-
-    def get(self, *args, **kwargs):
-        RoleFormSet = get_roleformset(self)
-        context = {
-            'RoleFormSet': RoleFormSet
-        }
-        return render(self.request, self.template_name, context)
-
-    def post(self,request,*args,**kwargs):
-        RoleFormSet=self.RoleFormSet(self.request.POST)
-        added = False
-        if update_users(RoleFormSet):
-            messages.success(request, "Users updated Successfully")
-        else:
-            context = {
-                'Managers': Manager.objects.all(),
-                'users': User.objects.all(),
-                'formset': self.RoleFormSet(initial=[
-                {
-                    'user': user,
-                    'role': 'Manager'
-                } for user in User.objects.all()
-                ])
-            }
-            messages.error(request, "Unable to update users")
-            return render(self.request,self.template_name,context)
-        return HttpResponseRedirect(reverse_lazy('management:user_management'))
-
-
 
 class UpdateLenseModelsView(LoginRequiredMixin, TemplateView):
     template_name = 'website/homepage.html'
@@ -67,28 +34,6 @@ class UpdateLenseModelsView(LoginRequiredMixin, TemplateView):
         else: # if not, returns a normal response
             return super(DeleteMonitorView,self).render_to_response(context, **response_kwargs)
 
-class AddUserView(ManagerRequiredMixin, CreateView):
-    model = User
-    form_class = UserCreationForm
-    template_name = 'management/add_user.html'
-    success_url = reverse_lazy('management:user_management')
-
-class DeleteUserView(ManagerRequiredMixin, DeleteView):
-    model = User
-    success_url = reverse_lazy('management:user_management')
-
-    # ajax sends a get request, which then deletes the object
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.delete()
-        context = self.get_context_data(object=self.object) # we dont need this but its safe to have
-        return self.render_to_response(context)
-
-    def render_to_response(self, context, **response_kwargs):
-        if self.request.is_ajax(): #checks if the request is ajax
-            return JsonResponse({'deleted': True}, safe=False, **response_kwargs)
-        else: # if not, returns a normal response
-            return super(DeleteMonitorView,self).render_to_response(context, **response_kwargs)
 
 class ToggleCNCLockView(ManagerRequiredMixin, UpdateView):
     model = Setting
@@ -97,7 +42,10 @@ class ToggleCNCLockView(ManagerRequiredMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.object.cnc_is_locked = kwargs['toggle']
+        if self.object.cnc_is_locked:
+            self.object.cnc_is_locked = False
+        else:
+            self.object.cnc_is_locked = True
         self.object.save()
         context = self.get_context_data(object=self.object) # we dont need this but its safe to have
         return self.render_to_response(context)
