@@ -62,19 +62,25 @@ def read_csv(request):
         else:
             file_data = csv_file.read().decode("utf-8")
 
-            for line in file_data:
-
+            lines = file_data.split("\n")
+            for line in lines:
+                print(line)
                 fields = line.split(",")
-
-                data = {
-                    'make': fields[0],
-                    'model': fields[1],
-                    'zoom_diameter': fields[2],
-                    'zoom_height': fields[3],
-                    'focus_diameter': fields[4],
-                    'focus_height': fields[5],
-                    'type' : fields[6]
-                }
+                for field in fields:
+                    print(field)
+                try:
+                    data = {
+                        'make': fields[0],
+                        'model': fields[1],
+                        'zoom_diameter': fields[2],
+                        'zoom_height': fields[3],
+                        'focus_diameter': fields[4],
+                        'focus_height': fields[5],
+                        'type' : fields[6]
+                    }
+                except Exception as e:
+                    print(e)
+                    break
 
                 form = LenseForm(data) # Use our form to make sure csv data is valid
 

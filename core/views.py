@@ -35,5 +35,5 @@ def login(request):
 # Logout
 def logout(request):
 	auth_logout(request)
-	next_page = request.GET.get('next', 'website:homepage_view')
+	next_page = request.GET.get('next', 'website:homepage')
 	return redirect(next_page)
