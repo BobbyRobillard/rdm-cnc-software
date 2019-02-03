@@ -60,11 +60,15 @@ table {
                 {{ RoleFormSet.management_form }}
                 {% for role in RoleFormSet %}
                 <tr>
-                  <td style="text-align:left"> {{ role.user }}
+                  <td style="text-align:left">
+                     {{ role.user }}
                     </td>
                   <td class="center">
                       {{ role.role }}
                     </td>
+                    <td>
+                      <i id="1" href="{% url 'management:delete_user' role.user %}" class="fas fa-trash-alt"></i>
+                      </td>
                   </tr>
                   {% endfor %}
               </tbody>
@@ -80,4 +84,11 @@ table {
 </div>
 {% endblock content %}
 {% block js %}
+  <script>
+    $(".fa-trash-alt").click(function() {
+      console.log("clicked: " + $(this).attr('id') + "\n");
+      $('#delete-row-' + $(this).attr('id')).remove();
+      $.get($(this).attr('href'), {}, function() {});
+    });
+  </script>
 {% endblock js%}

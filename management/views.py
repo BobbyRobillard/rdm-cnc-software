@@ -36,16 +36,15 @@ class UpdateUserStatusView(View):
         if RoleFormSet.is_valid():
             for role in RoleFormSet:
                 data = role.cleaned_data
-                user = User.objects.get(username=data['user'])
                 if data['role'] == 'Manager':
-                    Manager.objects.update_or_create(user=user,
+                    Manager.objects.update_or_create(user=data['user'],
                     defaults={
-                        'user' : user,
+                        'user': data['user'],
                         }
                         )
                 else:
-                    if Manager.objects.filter(user=user).exists():
-                        manager = Manager.objects.filter(user=user)
+                    if Manager.objects.filter(user=data['user']).exists():
+                        manager = Manager.objects.filter(user=data['user'])
                         manager.delete()
             return HttpResponseRedirect(reverse_lazy('management:user_management'))
         else:

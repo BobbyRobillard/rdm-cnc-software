@@ -16,5 +16,5 @@ class RoleForm(forms.Form):
         ('Manager', 'Manager'),
         ('Employee', 'Employee'),
     )
-    user = forms.CharField(max_length=100)
+    user = forms.ModelChoiceField(queryset=User.objects.all())
     role = forms.ChoiceField(choices = roles)
