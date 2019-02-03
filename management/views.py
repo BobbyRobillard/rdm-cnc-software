@@ -22,14 +22,7 @@ class UpdateUserStatusView(ManagerRequiredMixin, View):
     success_url = reverse_lazy('management:user_management')
 
     def get(self, *args, **kwargs):
-        RoleFormSet = self.RoleFormSet(initial=[
-        {
-            'user': user,
-            'role': UserMethods.is_manager(user)
-        } for user in User.objects.all()
-        ])
-        for form, user in zip(RoleFormSet, User.objects.all()):
-            form.fields['user'].queryset = User.objects.filter(username=user.username)
+        RoleFormSet = get_roleformset(self)
         context = {
             'RoleFormSet': RoleFormSet
         }
@@ -38,22 +31,8 @@ class UpdateUserStatusView(ManagerRequiredMixin, View):
     def post(self,request,*args,**kwargs):
         RoleFormSet=self.RoleFormSet(self.request.POST)
         added = False
-        if RoleFormSet.is_valid():
-            added = True
-            for role in RoleFormSet:
-                data = role.cleaned_data
-                if data['role'] == 'Manager':
-                    Manager.objects.update_or_create(user=data['user'],
-                    defaults={
-                        'user': data['user'],
-                        }
-                        )
-                else:
-                    if Manager.objects.filter(user=data['user']).exists():
-                        manager = Manager.objects.filter(user=data['user'])
-                        manager.delete()
+        if update_users(RoleFormSet):
             messages.success(request, "Users updated Successfully")
-            return HttpResponseRedirect(reverse_lazy('management:user_management'))
         else:
             context = {
                 'Managers': Manager.objects.all(),
@@ -65,8 +44,9 @@ class UpdateUserStatusView(ManagerRequiredMixin, View):
                 } for user in User.objects.all()
                 ])
             }
-            messages.error(request, "Users could not be updated")
-        return render(self.request,self.template_name,context)
+            messages.error(request, "Unable to update users")
+            return render(self.request,self.template_name,context)
+        return HttpResponseRedirect(reverse_lazy('management:user_management'))
 
 
 

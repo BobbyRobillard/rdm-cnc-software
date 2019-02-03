@@ -92,3 +92,31 @@ def read_csv(request):
     except Exception as e:
         print(str(e))
     return added
+
+def get_roleformset(self):
+    RoleFormSet = self.RoleFormSet(initial=[
+    {
+        'user': user,
+        'role': UserMethods.is_manager(user)
+    } for user in User.objects.all()
+    ])
+    for form, user in zip(RoleFormSet, User.objects.all()):
+        form.fields['user'].queryset = User.objects.filter(username=user.username)
+    return RoleFormSet
+
+def update_users(RoleFormSet):
+    if RoleFormSet.is_valid():
+        for role in RoleFormSet:
+            data = role.cleaned_data
+            if data['role'] == 'Manager':
+                Manager.objects.update_or_create(user=data['user'],
+                defaults={
+                    'user': data['user'],
+                    }
+                    )
+            else:
+                if Manager.objects.filter(user=data['user']).exists():
+                    manager = Manager.objects.filter(user=data['user'])
+                    manager.delete()
+        return True
+    return False
