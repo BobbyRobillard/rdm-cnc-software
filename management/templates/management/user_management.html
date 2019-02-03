@@ -64,7 +64,8 @@ table {
                 {% for role in RoleFormSet %}
                 <tr id="row-{{role.user.value}}">
                   <td style="text-align:left">
-                     {{ role.user }}
+                      {{ role.user.initial }}
+                      {{ role.user.as_hidden }}
                     </td>
                   <td class="center">
                       {{ role.role }}
@@ -78,7 +79,7 @@ table {
             </table>
             <div class="row">
               <div class="col text-center">
-            <button  type="submit" class="btn btn-primary">Update User Status</button>
+            <button  type="submit" class="btn btn-primary">Update User(s) Status</button>
             </div>
             </div>
             </form>

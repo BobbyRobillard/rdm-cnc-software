@@ -19,21 +19,24 @@ class UpdateUserStatusView(View):
     success_url = reverse_lazy('management:user_management')
 
     def get(self, *args, **kwargs):
+        RoleFormSet = self.RoleFormSet(initial=[
+        {
+            'user': user,
+            'role': UserMethods.is_manager(user)
+        } for user in User.objects.all()
+        ])
+        for form, user in zip(RoleFormSet, User.objects.all()):
+            form.fields['user'].queryset = User.objects.filter(username=user.username)
         context = {
-            'Managers': Manager.objects.all(),
-            'users': User.objects.all(),
-            'RoleFormSet': self.RoleFormSet(initial=[
-            {
-                'user': user,
-                'role': UserMethods.is_manager(user)
-            } for user in User.objects.all()
-            ])
+            'RoleFormSet': RoleFormSet
         }
         return render(self.request, self.template_name, context)
 
     def post(self,request,*args,**kwargs):
         RoleFormSet=self.RoleFormSet(self.request.POST)
+        added = False
         if RoleFormSet.is_valid():
+            added = True
             for role in RoleFormSet:
                 data = role.cleaned_data
                 if data['role'] == 'Manager':
@@ -46,6 +49,7 @@ class UpdateUserStatusView(View):
                     if Manager.objects.filter(user=data['user']).exists():
                         manager = Manager.objects.filter(user=data['user'])
                         manager.delete()
+            messages.success(request, "Users updated Successfully")
             return HttpResponseRedirect(reverse_lazy('management:user_management'))
         else:
             context = {
@@ -58,6 +62,7 @@ class UpdateUserStatusView(View):
                 } for user in User.objects.all()
                 ])
             }
+            messages.error(request, "Users could not be updated")
         return render(self.request,self.template_name,context)
 
 
@@ -101,6 +106,24 @@ class DeleteUserView(DeleteView):
             return JsonResponse({'deleted': True}, safe=False, **response_kwargs)
         else: # if not, returns a normal response
             return super(DeleteMonitorView,self).render_to_response(context, **response_kwargs)
+
+class ToggleCNCLockView(UpdateView):
+    model = Setting
+    form_class = SettingForm
+    success_url = reverse_lazy('management:homepage')
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.cnc_is_locked = kwargs['toggle']
+        self.object.save()
+        context = self.get_context_data(object=self.object) # we dont need this but its safe to have
+        return self.render_to_response(context)
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.is_ajax(): #checks if the request is ajax
+            return JsonResponse({'toggled': True}, safe=False, **response_kwargs)
+        else: # if not, returns a normal response
+            return super(UpdateProposalView ,self).render_to_response(context, **response_kwargs)
 
 def upload_csv(request):
     data = {}

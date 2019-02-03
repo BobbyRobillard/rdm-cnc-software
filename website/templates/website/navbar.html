@@ -1,3 +1,22 @@
+<style type="text/css">
+  .lock:hover .fa-unlock,
+  .lock .fa-lock {
+      display: none;
+  }
+  .lock:hover .fa-lock {
+      display: inline;
+  }
+  .unlock:hover .fa-lock,
+  .unlock .fa-unlock {
+      display: none;
+  }
+  .unlock:hover .fa-unlock {
+      display: inline;
+  }
+</style>
+
+
+
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <!-- Brand -->
   <a class="navbar-brand" href="{% url 'website:homepage' %}"><b>Band.it CNC</b></a>
@@ -18,7 +37,35 @@
     </li>
     <li class="nav-item">
       <a class="fas fa-upload" data-toggle="tooltip" title="Upload Lenses CSV" href="{% url 'management:upload_csv' %}"></a>
-      <i class="fas fa-lock" data-toggle="tooltip" title="Lock CNC Machine"></i>
+      {% if cnc_is_locked %}
+      <a class="unlock" href="{% url 'management:toggle_cnc' 1 False %}">
+        <i class="fas fa-lock"  data-toggle="tooltip" title="Unlock CNC Machine"></i>
+        <i class="fas fa-unlock" data-toggle="tooltip" title="Unlock CNC Machine"></i>
+      </a>
+      {% else %}
+      <a class="lock" href="{% url 'management:toggle_cnc' 1 True %}">
+        <i class="fas fa-unlock"  data-toggle="tooltip" title="Lock CNC Machine"></i>
+        <i class="fas fa-lock" data-toggle="tooltip" title="Lock CNC Machine"></i>
+      </a>
+      {% endif %}
     </li>
   </ul>
 </nav>
+
+  <script>
+  $('.unlock').click(function(){
+    var id = $(this).attr('id');
+    $.get($(this).attr('href'), {}, function(data) {
+      if( data.toggled) {
+        location.reload();
+      }
+    });
+});
+$('.lock').click(function(){
+  $.get($(this).attr('href'), {}, function(data) {
+    if( data.toggled) {
+      location.reload();
+    }
+  });
+});
+  </script>

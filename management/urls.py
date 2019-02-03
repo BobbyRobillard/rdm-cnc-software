@@ -1,7 +1,8 @@
 from django.conf.urls import url, include
 
 from management.views import (ViewSettingsPage, upload_csv, UpdateLenseModelsView,
-								UpdateUserStatusView, DeleteUserView, AddUserView)
+								UpdateUserStatusView, DeleteUserView, AddUserView,
+								ToggleCNCLockView)
 
 # Application Routes (URLs)
 
@@ -16,4 +17,5 @@ urlpatterns = [
 		url(r'^update-lense-models/$', UpdateLenseModelsView.as_view(), name='update_lense_models'),
 		url(r'^delete-user/(?P<pk>\d+)/$', DeleteUserView.as_view(), name='delete_user'),
 		url(r'^add-user/$', AddUserView.as_view(), name='add_user'),
+		url(r'^toggle-cnc/(?P<pk>\d+)/(?P<toggle>\w+)/$', ToggleCNCLockView.as_view(), name='toggle_cnc'),
 ]
