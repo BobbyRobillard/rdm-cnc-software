@@ -64,10 +64,7 @@ def read_csv(request):
 
             lines = file_data.split("\n")
             for line in lines:
-                print(line)
                 fields = line.split(",")
-                for field in fields:
-                    print(field)
                 try:
                     data = {
                         'make': fields[0],
@@ -78,8 +75,7 @@ def read_csv(request):
                         'focus_height': fields[5],
                         'type' : fields[6]
                     }
-                except Exception as e:
-                    print(e)
+                except:
                     break
 
                 form = LenseForm(data) # Use our form to make sure csv data is valid
