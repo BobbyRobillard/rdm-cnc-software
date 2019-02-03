@@ -1,6 +1,9 @@
 from management.utils import *
+from management.mixins import ManagerRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
-class ViewSettingsPage(FormView):
+class ViewSettingsPage(LoginRequiredMixin, FormView):
     template_name = 'management/settings.html'
     form_class = SettingForm
     success_url = reverse_lazy('website:homepage')
@@ -13,7 +16,7 @@ class ViewSettingsPage(FormView):
         update_setting(data)
         return super().form_valid(form)
 
-class UpdateUserStatusView(View):
+class UpdateUserStatusView(ManagerRequiredMixin, View):
     template_name = 'management/user_management.html'
     RoleFormSet = formset_factory(RoleForm, max_num=len(User.objects.all()))
     success_url = reverse_lazy('management:user_management')
@@ -67,7 +70,7 @@ class UpdateUserStatusView(View):
 
 
 
-class UpdateLenseModelsView(TemplateView):
+class UpdateLenseModelsView(LoginRequiredMixin, TemplateView):
     template_name = 'website/homepage.html'
 
     def get(self, request, *args, **kwargs):
@@ -84,13 +87,13 @@ class UpdateLenseModelsView(TemplateView):
         else: # if not, returns a normal response
             return super(DeleteMonitorView,self).render_to_response(context, **response_kwargs)
 
-class AddUserView(CreateView):
+class AddUserView(ManagerRequiredMixin, CreateView):
     model = User
     form_class = UserCreationForm
     template_name = 'management/add_user.html'
     success_url = reverse_lazy('management:user_management')
 
-class DeleteUserView(DeleteView):
+class DeleteUserView(ManagerRequiredMixin, DeleteView):
     model = User
     success_url = reverse_lazy('management:user_management')
 
@@ -107,7 +110,7 @@ class DeleteUserView(DeleteView):
         else: # if not, returns a normal response
             return super(DeleteMonitorView,self).render_to_response(context, **response_kwargs)
 
-class ToggleCNCLockView(UpdateView):
+class ToggleCNCLockView(ManagerRequiredMixin, UpdateView):
     model = Setting
     form_class = SettingForm
     success_url = reverse_lazy('management:homepage')
