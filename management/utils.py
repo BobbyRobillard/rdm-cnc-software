@@ -8,8 +8,7 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from management.models import Setting, Lense
-from website.models import UserMethods
-from management.forms import SettingForm, LenseForm, RoleForm
+from management.forms import SettingForm, LenseForm
 from django.forms import formset_factory
 from django.contrib.auth.forms import UserCreationForm
 
