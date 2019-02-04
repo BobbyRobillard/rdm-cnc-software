@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 
 from django.contrib.auth.models import User
-from management.models import Setting, Lense, Manager
+from management.models import Setting, Lense
 from website.models import UserMethods
 from management.forms import SettingForm, LenseForm, RoleForm
 from django.forms import formset_factory

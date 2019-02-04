@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 class ManagerRequiredMixin(UserPassesTestMixin):
     def test_func(self):
-        if Manager.objects.filter(user=self.request.user):
+        if request.user.is_superuser:
             return True
         else:
             return False
