@@ -82,36 +82,14 @@ table {
                   </tr>
                   <tr>
                     <td class="content">
-                      <select>
-                        <option selected>
-                          Select a Lense Make...
-                        </option>
-                        {% for make in makes %}
-                        <option value="{{ make }}">
-                          {{ make }}
-                        </option>
+                      <form action="#" method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        {{ field.label }}
+                        {{ field }}<br />
                         {% endfor %}
-                      </select><br />
-
-                      <select>
-                        <option selected>
-                          Select a Lense Model...
-                        </option>
-                      </select><br />
-
-                      <select>
-                        <option selected>
-                          Select a Lense Type...
-                        </option>
-                      </select><br />
-
-                      <span class="right">
-                        <b>Custom Default Size</b> <input type="text" placeholder="Enter size..." />
-                        <br />
-                        Save as default size<input type="checkbox" style="margin-top:10px;margin-bottom:10px;margin-left: 10px;"/>
-                      </span>
-                      <br />
-                      <button class="btn btn-success col-12">Add to Queue</button>
+                        <button class="btn btn-success col-12">Add to Queue</button>
+                      </form>
                     </td>
                   </tr>
                   <tr>
