@@ -14,8 +14,16 @@ import json
 @login_required
 def homepage_view(request):
     context = {
-    "makes" : Lense.objects.all().values_list('make', flat=True).distinct(),
-    "models" : Lense.objects.all().values_list('model', flat=True).distinct(),
     "form" : QueueForm()
     }
     return render(request, "website/homepage.html", context)
+
+def add_to_queue_view(request):
+    if request.method == "POST":
+        form = QueueForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'website/homepage.html', {"form" : form})
+
+        add_to_queue(request.user, form.cleaned_data)
+    return redirect('website:homepage')

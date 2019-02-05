@@ -9,4 +9,5 @@ app_name = 'website'
 urlpatterns = [
     	# General Page Views
 		url(r'^$', views.homepage_view, name='homepage'),
+		url(r'^add-to-queue$', views.add_to_queue_view, name='add_to_queue'),
 ]

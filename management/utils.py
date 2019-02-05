@@ -68,11 +68,9 @@ def read_csv(request):
                     data = {
                         'make': fields[0],
                         'model': fields[1],
-                        'zoom_diameter': fields[2],
-                        'zoom_height': fields[3],
-                        'focus_diameter': fields[4],
-                        'focus_height': fields[5],
-                        'type' : fields[6]
+                        'diameter': fields[2],
+                        'height': fields[3],
+                        'type' : fields[4]
                     }
                 except:
                     break

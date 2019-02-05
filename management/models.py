@@ -14,10 +14,11 @@ class StandardBandit(models.Model):
         return str(self.name)
 
 class Lense(models.Model):
-    height = models.DecimalField(default=0, max_digits=max_digits, decimal_places=decimal_digits)
-    diameter = models.DecimalField(default=0, max_digits=max_digits, decimal_places=decimal_digits)
     make = models.CharField(max_length=name_length)
     model = models.CharField(max_length=name_length)
+    diameter = models.DecimalField(default=0, max_digits=max_digits, decimal_places=decimal_digits)
+    height = models.DecimalField(default=0, max_digits=max_digits, decimal_places=decimal_digits)
+    type = models.CharField(max_length=4)
     custom_band_size = models.ForeignKey(StandardBandit, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
