@@ -34,27 +34,12 @@ class UpdateLenseModelsView(LoginRequiredMixin, TemplateView):
         else: # if not, returns a normal response
             return super(DeleteMonitorView,self).render_to_response(context, **response_kwargs)
 
-
-class ToggleCNCLockView(ManagerRequiredMixin, UpdateView):
-    model = Setting
-    form_class = SettingForm
-    success_url = reverse_lazy('management:homepage')
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.cnc_is_locked:
-            self.object.cnc_is_locked = False
-        else:
-            self.object.cnc_is_locked = True
-        self.object.save()
-        context = self.get_context_data(object=self.object) # we dont need this but its safe to have
-        return self.render_to_response(context)
-
-    def render_to_response(self, context, **response_kwargs):
-        if self.request.is_ajax(): #checks if the request is ajax
-            return JsonResponse({'toggled': True}, safe=False, **response_kwargs)
-        else: # if not, returns a normal response
-            return super(UpdateProposalView ,self).render_to_response(context, **response_kwargs)
+def cnc_toggle_lock_view(request): # Simple if better than complex...
+    if request.user.is_superuser:
+        setting = Setting.objects.get(pk=1)
+        setting.cnc_is_locked = (not setting.cnc_is_locked)
+        setting.save()
+    return redirect('website:homepage')
 
 def upload_csv(request):
     data = {}

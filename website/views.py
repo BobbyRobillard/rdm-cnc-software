@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
-from .utils import *
+from management.models import Lense
 
 import json
 

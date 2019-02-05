@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
-from management.views import (ViewSettingsPage, upload_csv, UpdateLenseModelsView,
-								ToggleCNCLockView)
+from . import views
+from management.views import (ViewSettingsPage, upload_csv, UpdateLenseModelsView)
 
 # Application Routes (URLs)
 
@@ -13,5 +13,5 @@ urlpatterns = [
 		url(r'^settings/$', ViewSettingsPage.as_view(), name='settings'),
 		url(r'^upload/csv/$', upload_csv, name='upload_csv'),
 		url(r'^update-lense-models/$', UpdateLenseModelsView.as_view(), name='update_lense_models'),
-		url(r'^toggle-cnc/(?P<pk>\d+)/$', ToggleCNCLockView.as_view(), name='toggle_cnc'),
+		url(r'^toggle-cnc/', views.cnc_toggle_lock_view, name='toggle_cnc'),
 ]
