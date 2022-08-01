@@ -1,0 +1,203 @@
+{% extends 'website/base.html' %}
+
+{% block custom_css %}
+<style type="text/css">
+body {
+  background-color: #f5f6f7;
+}
+
+h2 {
+  text-align: center;
+}
+
+.heading {
+  background-color: #08f;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.right {
+  text-align: right;
+  float: right;
+}
+
+select {
+  margin-bottom: 25px;
+}
+
+td, tr {
+  background-color: white;
+}
+
+.fa-copy {
+  color: orange;
+}
+
+.queue > tbody > tr > td:nth-child(odd):hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+.saved:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+.saved {
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+}
+
+.save-queue {
+  -webkit-box-shadow: 0px 2px 5px 2px rgba(168,168,168,1);
+  -moz-box-shadow: 0px 2px 5px 2px rgba(168,168,168,1);
+  box-shadow: 0px 2px 5px 2px rgba(168,168,168,1);
+  background-color:white;padding:20px;padding-bottom:8px;border-radius:10px;
+}
+</style>
+{% endblock custom_css %}
+
+{% block content %}
+{% include 'website/server_messages.html' %}
+<br />
+<div class="container">
+  <div class="row">
+      <div class="col-lg-4">
+        <h2>Add to Queue</h2>
+          <table class="table">
+              <tbody>
+                  <tr>
+                    <td class="heading top-rounded">
+                      Select a Lense
+                    </td>
+                  </tr>
+                  <tr>
+                    <td id="form-container" class="content">
+                      {% include 'website/queue_form.html' %}
+                    </td>
+                  </tr>
+                  <tr>
+                      <td class="heading">
+                        Recent Lenses
+                      </td>
+                  </tr>
+                  <tr>
+                    <td class="content bottom-rounded">
+                      {% for lense in recent_lenses %}
+                      {% empty %}
+                        There are no recent lenses
+                      {% endfor %}
+                    </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <div class="col-lg-4">
+          <h2>Saved Queues</h2>
+          <table class="table">
+              <tbody>
+                {% for queue in saved_queues %}
+                <tr>
+                  <td href="{% url 'website:add_bands_from_queue' pk=queue.pk %}" class="saved">
+                    <b>Name:</b> {{ queue.name }}
+                    <i href="{% url 'website:delete_saved_queue' pk=queue.pk %}" class="fas fa-trash-alt" data-toggle="tooltip" title="Deleted this saved queue" style="float:right;"></i>
+                    <ul>
+                      {% for item in queue.get_items_in_queue %}
+                      <li>
+                        {{ item.lense }}
+                      </li>
+                      {% empty %}
+                      <li>
+                        This queue has no lenses
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td class="bottom-rounded top-rounded">
+                    You have no save queues.
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+      </div>
+      <div class="col-lg-4">
+          <h2>Current Queue</h2>
+          <table class="table queue">
+              <tbody>
+                {% for item in queue %}
+                <tr>
+                  <td href="{% url 'management:cut' pk=item.pk %}" class="bottom-rounded top-rounded">
+                    {{ item.lense.make }} | {{ item.lense.model }} | <text style="color:#08f;">{{ item.lense.type }}</text><br />
+                    Band Size Needed: <text style="color:#08f;">{{ item.lense.get_band_size }}</text>
+                  </td>
+                  <td class="bottom-rounded top-rounded">
+                    <i href="{% url 'website:delete_from_queue' pk=item.pk %}" class="fas fa-trash-alt"></i><br />
+                    <i href="{% url 'website:copy_item' pk=item.pk %}" class="far fa-copy"></i>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="2" class="bottom-rounded top-rounded">
+                    There are no lenses currently in the Queue
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+          <hr />
+          <div class="save-queue">
+            <h2>Save this queue</h2>
+            <form action="{% url 'website:save_queue' %}" method="POST">
+              {% csrf_token %}
+              {% for field in save_form %}
+              <b>Name to save as</b>
+              {{ field }}
+              {% endfor %}
+              <br /><br />
+              <button class="btn btn-warning" style="float:right;">Save Current Queue</button>
+              <br /><br />
+            </form>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script>
+  $(".queue > tbody > tr > td:nth-child(odd)").click(function() {
+      window.location.href = $(this).attr('href');
+  });
+
+  $('.fa-copy').click(function() {
+      window.location.href = $(this).attr('href');
+  });
+
+  $(".fa-trash-alt").click(function(e) {
+      e.stopPropagation();
+      window.location.href = $(this).attr('href');
+  });
+
+  $('.saved').click(function() {
+      window.location.href = $(this).attr('href');
+  });
+
+  // Dynamically update the models of queue form
+  $('body').on('change', '#id_make', function() {
+      $.get("{% url 'website:change_model' %}", {
+        "make": $(this).val()
+      }, function(data) {
+        $('#form-container').html(data.new_form);
+        console.log("data: " + data.new_form + "\n\n");
+      });
+  });
+</script>
+{% endblock js %}

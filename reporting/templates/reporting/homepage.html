@@ -1,0 +1,47 @@
+{% extends 'website/base.html' %}
+
+{% block custom_css %}
+<style type="text/css">
+
+</style>
+{% endblock custom_css %}
+
+{% block content %}
+{% include 'website/server_messages.html' %}
+<br />
+<div class="container">
+  <div class="row">
+      <div class="col">
+        <h2>Metrics</h2>
+        <table class="table">
+            <tr>
+              <td><b>Make</b></td>
+              <td><b>Model</b></td>
+              <td><b>Type</b></td>
+              <td class="center"><b>Amount Sold</b></td>
+            </tr>
+            {% for d in diagnostics %}
+            <tr>
+              <td>{{ d.lense.make }}</td>
+              <td>{{ d.lense.model }}</td>
+              <td>{{ d.lense.type }}</td>
+              <td class="center">{{ d.amount_processed }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4">
+                  There are currently no lense diagnostics
+              </td>
+            </tr>
+            {% endfor %}
+        </table>
+      </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script>
+
+</script>
+{% endblock js %}

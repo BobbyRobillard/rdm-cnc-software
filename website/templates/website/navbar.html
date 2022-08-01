@@ -1,0 +1,72 @@
+{% load staticfiles %}
+
+<style type="text/css">
+  .lock:hover .fa-unlock,
+  .lock .fa-lock {
+      display: none;
+  }
+  .lock:hover .fa-lock {
+      display: inline;
+  }
+  .unlock:hover .fa-lock,
+  .unlock .fa-unlock {
+      display: none;
+  }
+  .unlock:hover .fa-unlock {
+      display: inline;
+  }
+</style>
+
+
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <!-- Brand -->
+  <a class="navbar-brand" href="{% url 'website:homepage' %}">
+    <img id="logo" src="{% static 'website/images/logo.jpg' %}" alt="Logo" style="width:40px;">
+  </a>
+
+  <!-- Links -->
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'website:homepage' %}">Manufacture</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'reporting:homepage' %}">Metrics</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer">Users & Settings</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'management:stop_cnc' %}">Master CNC Reset</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'core:logout' %}">Logout</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="fas fa-upload" data-toggle="tooltip" title="Upload Lenses CSV" href="{% url 'management:upload_csv' %}"></a>
+      {% if cnc_is_locked %}
+        <a class="unlock" href="{% url 'management:toggle_cnc' %}">
+          <i class="fas fa-lock"  data-toggle="tooltip" title="Unlock CNC Machine"></i>
+          <i class="fas fa-unlock" data-toggle="tooltip" title="Unlock CNC Machine"></i>
+        </a>
+      {% else %}
+        <a class="lock" href="{% url 'management:toggle_cnc' %}">
+          <i class="fas fa-unlock"  data-toggle="tooltip" title="Lock CNC Machine"></i>
+          <i class="fas fa-lock" data-toggle="tooltip" title="Lock CNC Machine"></i>
+        </a>
+      {% endif %}
+    </li>
+
+  </ul>
+</nav>
+
+<script>
+  $('.lock .unlock').click(function(){
+      window.location.href = "{% url 'management:toggle_cnc' %}";
+  });
+</script>

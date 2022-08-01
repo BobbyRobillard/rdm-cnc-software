@@ -1,0 +1,47 @@
+[
+{
+  "model": "management.standardbandit",
+  "pk": 1,
+  "fields": {
+    "name": "Small Band.it",
+    "abbreviation": "S",
+    "initial_height": "36"
+  }
+},
+{
+  "model": "management.standardbandit",
+  "pk": 2,
+  "fields": {
+    "name": "Medium Small Band.it",
+    "abbreviation": "Ms",
+    "initial_height": "38"
+  }
+},
+{
+  "model": "management.standardbandit",
+  "pk": 3,
+  "fields": {
+    "name": "Medium Medium Band.it",
+    "abbreviation": "Mm",
+    "initial_height": "46"
+  }
+},
+{
+  "model": "management.standardbandit",
+  "pk": 4,
+  "fields": {
+    "name": "Medium Large Band.it",
+    "abbreviation": "Ml",
+    "initial_height": "71"
+  }
+},
+{
+  "model": "management.standardbandit",
+  "pk": 5,
+  "fields": {
+    "name": "Large Band.it",
+    "abbreviation": "L",
+    "initial_height": "59"
+  }
+}
+]
